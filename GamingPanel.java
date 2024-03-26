@@ -39,7 +39,7 @@ public class GamingPanel extends JPanel{
         appleGenerateThread = new Thread(() -> {
             while(running){
                 try{
-                    Thread.sleep(500);
+                    Thread.sleep(400);
                     InteractableDrawing obj = new Apple();
                     bombsAndApples.add(obj);
                     add((Apple) obj);
@@ -53,7 +53,7 @@ public class GamingPanel extends JPanel{
         bombGenerateThread = new Thread(() -> {
             while(running){
                 try{
-                    Thread.sleep(500);
+                    Thread.sleep(400);
                     InteractableDrawing obj = new Bomb();
                     bombsAndApples.add(obj);
                     add((Bomb) obj);

@@ -11,6 +11,13 @@ public class Apple extends JComponent implements InteractableDrawing{
     Random rd = new Random();
 
     public Apple(){
+        int chance = rd.nextInt(1,20);
+
+        if(chance == 2)
+            color = Color.RED;
+        else
+            color = Color.GREEN;
+
         x = 750;
         y = rd.nextInt(0, 551);
     }
@@ -46,18 +53,10 @@ public class Apple extends JComponent implements InteractableDrawing{
 
     @Override
     public void draw(Graphics g) {
-        int chance = rd.nextInt(1,6);
         
-        g.setColor(Color.WHITE);
-        g.fillRect(x, y, WIDTH, LENGTH);
-        if(chance == 2){
-            g.setColor(Color.RED);
-            color = Color.RED;
-        }
-        else{
-            g.setColor(Color.GREEN);
-            color = Color.GREEN;
-        }
+        // g.setColor(Color.WHITE);
+        // g.fillRect(x, y, WIDTH, LENGTH);
+        g.setColor(color);
         g.fillOval(x, y, WIDTH, LENGTH);
     }
 
