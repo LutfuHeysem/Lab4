@@ -22,7 +22,11 @@ public class Bomb extends JComponent implements InteractableDrawing{
         int shipY0 = s.getY();
         int shipX1 = shipX0+60;
         int shipY1 = shipY0+30;
-        if(x >= shipX0 && x <= shipX1 && y >= shipY0 && y <= shipY1)
+        int bombX0 = x;
+        int bombY0 = y;
+        int bombX1 = x+WIDTH;
+        int bombY1 = y+LENGTH;
+        if((bombX0 >= shipX0 && bombX0 <= shipX1 && bombY0 >= shipY0 && bombY0 <= shipY1) || (bombX1 >= shipX0 && bombX1 <= shipX1 && bombY1 >= shipY0 && bombY1 <= shipY1))
             return true;
         else
             return false;
@@ -52,7 +56,6 @@ public class Bomb extends JComponent implements InteractableDrawing{
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
-        draw(g);
     }
     
 }

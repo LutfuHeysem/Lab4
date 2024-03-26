@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 public class MainMenu extends JFrame{
     private JTextField nameTextField;
     private JTextField speedTextField;
+    private static String name;
+    private static int speed;
 
 
     public MainMenu(){
@@ -24,25 +26,33 @@ public class MainMenu extends JFrame{
             boolean nameTooLong = isNameTooLong(nameTextField.getText());
 
             if(!speedInput)
-                JOptionPane.showMessageDialog(new JFrame(), "Speed can't be empty!");
+                JOptionPane.showMessageDialog(MainMenu.this, "Speed can't be empty!");
 
             else if(!speedInputCorrect)
-                JOptionPane.showMessageDialog(new JFrame(), "Speed should only be digits!");
+                JOptionPane.showMessageDialog(MainMenu.this, "Speed should only be digits!");
 
             if(!nameInput)
-                JOptionPane.showMessageDialog(new JFrame(), "Name can't be empty!");
+                JOptionPane.showMessageDialog(MainMenu.this, "Name can't be empty!");
             
             else if(!nameTooLong)
-                JOptionPane.showMessageDialog(new JFrame(), "Name can't be longet than 9 characters!");
+                JOptionPane.showMessageDialog(MainMenu.this, "Name can't be longet than 9 characters!");
 
             if(speedInput && speedInputCorrect && nameInput && nameTooLong){
                 setVisible(false);
-                new GameFrame(Integer.valueOf(speedTextField.getText()), nameTextField.getText());
+                name = nameTextField.getText();
+                speed = Integer.valueOf(speedTextField.getText());
+                new GameFrame(Integer.valueOf(speedTextField.getText()), nameTextField.getText(), MainMenu.this);
             }
         }
 
-        
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getSpeed() {
+        return speed;
     }
 
     private void createComponents(){

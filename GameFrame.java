@@ -6,18 +6,22 @@ public class GameFrame extends JFrame{
     private int lives = 3;
     private int score = 0;
     private int inSpeed;
+
     GamingPanel gamePanel;
-    Thread appleMovingThread;
-    Thread bombMovingThread;
+
+    Thread interactableObjMovingThread;
     private boolean running = true;
-    ArrayList<Apple> apples;
-    ArrayList<Bomb> bombs;
+
+    ArrayList<InteractableDrawing> bombsAndApples;
+    
+    private MainMenu mM;
 
     public int getSpeed() {
         return inSpeed;
     }
 
-    GameFrame(Integer speed, String name) {
+    GameFrame(Integer speed, String name, MainMenu main) {
+        mM = main;
         inSpeed = speed;
         setTitle("Lives: " + lives + " - Score: " + score);
         setSize(800, 600);
@@ -28,20 +32,20 @@ public class GameFrame extends JFrame{
         
         setVisible(true);
 
-        appleMovingThread = new Thread(() -> {
-            apples = gamePanel.getApples();
+        interactableObjMovingThread = new Thread(() -> {
+            bombsAndApples = gamePanel.getBombsAndApples();
             while(running){
                 try{
                     Thread.sleep(20);
-                    for(int i=0; i<apples.size(); i++){
-                        Apple apple = apples.get(i);
-                        if(!apple.moveLeft(inSpeed)){
-                            apples.remove(apple);
+                    for(int i=0; i<bombsAndApples.size(); i++){
+                        InteractableDrawing obj = bombsAndApples.get(i);
+                        if(!obj.moveLeft(inSpeed)){
+                            bombsAndApples.remove(obj);
                             i--;
                         }
-                        else if(apple.intersects(gamePanel.getShip())){
-                            apple.interact(gamePanel.getShip());
-                            apples.remove(apple);
+                        else if(obj.intersects(gamePanel.getShip())){
+                            obj.interact(gamePanel.getShip());
+                            bombsAndApples.remove(obj);
                         }
                     }
                     gamePanel.repaint();
@@ -51,32 +55,8 @@ public class GameFrame extends JFrame{
                 }
             }
         });
-        appleMovingThread.start();
 
-        bombMovingThread = new Thread(() -> {
-            bombs = gamePanel.getBombs();
-            while(running){
-                try{
-                    Thread.sleep(20);
-                    for(int i=0; i<bombs.size(); i++){
-                        Bomb bomb = bombs.get(i);
-                        if(!bomb.moveLeft(inSpeed)){
-                            bombs.remove(bomb);
-                            i--;
-                        }
-                        else if(bomb.intersects(gamePanel.getShip())){
-                            bomb.interact(gamePanel.getShip());
-                            bombs.remove(bomb);
-                        }
-                    }
-                    gamePanel.repaint();
-                }
-                catch (InterruptedException e){
-                    e.printStackTrace();
-                }
-            }
-        });
-        bombMovingThread.start();
+        interactableObjMovingThread.start();
     }
 
     public void getHit(){
@@ -95,9 +75,10 @@ public class GameFrame extends JFrame{
     }
 
     private void restartGame(){
-        setVisible(false);
-        new MainMenu();
-
+        int speed = mM.getSpeed();
+        String name = mM.getName();
+        dispose();
+        new GameFrame(speed, name, mM);
     }
 
     public void increaseScore(){

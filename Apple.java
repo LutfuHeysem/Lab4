@@ -21,7 +21,11 @@ public class Apple extends JComponent implements InteractableDrawing{
         int shipY0 = s.getY();
         int shipX1 = shipX0+60;
         int shipY1 = shipY0+30;
-        if(x >= shipX0 && x <= shipX1 && y >= shipY0 && y <= shipY1)
+        int appleX0 = x;
+        int appleY0 = y;
+        int appleX1 = x+WIDTH;
+        int appleY1 = y+LENGTH;
+        if((appleX0 >= shipX0 && appleX0 <= shipX1 && appleY0 >= shipY0 && appleY0 <= shipY1) || (appleX1 >= shipX0 && appleX1 <= shipX1 && appleY1 >= shipY0 && appleY1 <= shipY1))
             return true;
         else
             return false;
@@ -60,7 +64,6 @@ public class Apple extends JComponent implements InteractableDrawing{
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
-        draw(g);
     }
     
 }

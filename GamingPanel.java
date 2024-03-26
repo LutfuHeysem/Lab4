@@ -7,20 +7,19 @@ import javax.swing.JPanel;
 
 public class GamingPanel extends JPanel{
     private Ship ship;
-    private ArrayList<Apple> apples;
-    private ArrayList<Bomb> bombs;
+
+    private ArrayList<InteractableDrawing> bombsAndApples;
     private boolean running = true;
+
+    Thread appleGenerateThread;
+    Thread bombGenerateThread;
 
     public void stopThreads(){
         running = false;
     }
 
-    public ArrayList<Apple> getApples() {
-        return apples;
-    }
-
-    public ArrayList<Bomb> getBombs() {
-        return bombs;
+    public ArrayList<InteractableDrawing> getBombsAndApples() {
+        return bombsAndApples;
     }
 
     public Ship getShip() {
@@ -35,13 +34,15 @@ public class GamingPanel extends JPanel{
         ship = new Ship(name, gameFrame);
         add(ship);
 
-        apples = new ArrayList<>();
-        Thread appleGenerateThread = new Thread(() -> {
+        bombsAndApples = new ArrayList<>();
+
+        appleGenerateThread = new Thread(() -> {
             while(running){
                 try{
                     Thread.sleep(500);
-                    apples.add(new Apple());
-                    add(apples.get(apples.size()-1));
+                    InteractableDrawing obj = new Apple();
+                    bombsAndApples.add(obj);
+                    add((Apple) obj);
                 }
                 catch(InterruptedException e){
                     e.printStackTrace();
@@ -49,13 +50,13 @@ public class GamingPanel extends JPanel{
             }
         });
 
-        bombs = new ArrayList<>();    
-        Thread bombGenerateThread = new Thread(() -> {
+        bombGenerateThread = new Thread(() -> {
             while(running){
                 try{
                     Thread.sleep(500);
-                    bombs.add(new Bomb());
-                    add(bombs.get(bombs.size()-1));
+                    InteractableDrawing obj = new Bomb();
+                    bombsAndApples.add(obj);
+                    add((Bomb) obj);
                 }
                 catch(InterruptedException e){
                     e.printStackTrace();
@@ -69,10 +70,8 @@ public class GamingPanel extends JPanel{
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
-        for(Apple apple : apples)
-            apple.draw(g);
-        for(Bomb bomb : bombs)
-            bomb.draw(g);
+        for(InteractableDrawing obj : bombsAndApples)
+            obj.draw(g);
     }
 
     class MotionListener implements MouseMotionListener{
